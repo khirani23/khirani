@@ -1,13 +1,359 @@
 <!DOCTYPE html>
-
-<html>
+<html lang="id">
 <head>
-  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
-  <title>Hello, World!</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bakso Solo Berkah - Katalog Resmi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Poppins', sans-serif; scroll-behavior: smooth; }
+        .cart-bounce { animation: bounce 0.5s ease-in-out; }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-5px); }
+        }
+        .product-card:hover img { transform: scale(1.1); }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
+    </style>
 </head>
-<body>
-  <h1>
-    Hello, nama saya khirani
-  </h1>
+<body class="bg-slate-50 text-slate-800">
+
+    <!-- Header -->
+    <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md shadow-sm border-b border-slate-100">
+        <div class="container mx-auto px-4 py-3 flex justify-between items-center">
+            <div class="flex items-center space-x-3 cursor-pointer" onclick="window.scrollTo({top: 0, behavior: 'smooth'})">
+                <img src="https://simangu.smksalirsyad-hgl.sch.id/apimangu/uploads/siswa/232410058/1773109159_2fe6dbc1.png" 
+                     alt="Logo Bakso Solo Berkah" 
+                     class="h-10 w-auto object-contain">
+                <div>
+                    <h1 class="text-base font-bold leading-none text-red-600">Bakso Solo</h1>
+                    <span class="text-[9px] font-semibold text-slate-500 tracking-[0.2em] uppercase">Berkah Autentik</span>
+                </div>
+            </div>
+            
+            <div class="flex items-center space-x-4">
+                <button onclick="toggleCart()" class="relative p-2.5 bg-slate-100 rounded-full hover:bg-red-50 hover:text-red-600 transition-all group">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    <span id="cart-count" class="absolute -top-1 -right-1 bg-red-600 text-white text-[10px] font-bold rounded-full h-5 w-5 flex items-center justify-center hidden border-2 border-white group-hover:scale-110 transition-transform">0</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero/Banner Section -->
+    <section class="container mx-auto px-4 pt-4">
+        <div class="w-full rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white relative group">
+            <img src="https://simangu.smksalirsyad-hgl.sch.id/apimangu/uploads/siswa/232410058/1773109174_739b5070.png" 
+                 alt="Banner Bakso Solo Berkah" 
+                 class="w-full h-full object-cover aspect-[21/9] md:aspect-[3/1] group-hover:scale-[1.02] transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent flex flex-col justify-end p-6 md:p-12">
+                <span class="bg-red-600 text-white text-[10px] font-bold px-3 py-1 rounded-full w-fit mb-2 uppercase tracking-widest">Premium Quality</span>
+                <h2 class="text-white text-2xl md:text-4xl font-black mb-1">Cita Rasa Solo Asli</h2>
+                <p class="text-white/80 text-xs md:text-sm font-light max-w-md">Resep turun temurun dengan daging sapi pilihan.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catalog Section -->
+    <main class="container mx-auto px-4 py-12 pb-24">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+            <div>
+                <span class="text-red-600 font-bold text-xs uppercase tracking-widest mb-2 block">Menu Spesial</span>
+                <h2 class="text-3xl font-black text-slate-900">Katalog Produk</h2>
+            </div>
+            <div class="flex space-x-2">
+                <button class="bg-red-600 text-white px-4 py-2 rounded-full text-xs font-bold">Semua</button>
+                <button class="bg-white text-slate-400 px-4 py-2 rounded-full text-xs font-bold border border-slate-100">Bakso</button>
+                <button class="bg-white text-slate-400 px-4 py-2 rounded-full text-xs font-bold border border-slate-100">Minuman</button>
+            </div>
+        </div>
+
+        <!-- Menu Grid -->
+        <div id="menu-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+            <!-- Items injected by JS -->
+        </div>
+    </main>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="fixed inset-0 z-[70] hidden flex items-center justify-center p-4">
+        <div class="absolute inset-0 bg-slate-900/80 backdrop-blur-sm" onclick="closeModal()"></div>
+        <div class="bg-white w-full max-w-2xl rounded-[2.5rem] overflow-hidden relative shadow-2xl flex flex-col md:flex-row max-h-[90vh]">
+            <button onclick="closeModal()" class="absolute top-4 right-4 z-10 bg-white/80 backdrop-blur p-2 rounded-full shadow-lg hover:bg-red-500 hover:text-white transition-colors">
+                <i data-lucide="x" class="w-5 h-5"></i>
+            </button>
+            <div class="w-full md:w-1/2 h-64 md:h-auto overflow-hidden">
+                <img id="modal-img" src="" class="w-full h-full object-cover" alt="">
+            </div>
+            <div class="p-8 md:w-1/2 flex flex-col overflow-y-auto custom-scrollbar">
+                <span id="modal-category" class="text-red-600 font-bold text-[10px] uppercase tracking-widest mb-2">Bakso</span>
+                <h3 id="modal-title" class="text-2xl font-black text-slate-900 mb-2"></h3>
+                <p id="modal-price" class="text-xl font-bold text-slate-900 mb-4"></p>
+                <div class="border-t border-slate-100 pt-4 mb-6">
+                    <p id="modal-desc" class="text-slate-500 text-sm leading-relaxed mb-6"></p>
+                    <div class="flex items-center space-x-2 text-[10px] text-slate-400 font-medium">
+                        <i data-lucide="check-circle-2" class="w-3 h-3 text-green-500"></i>
+                        <span>Higienis</span>
+                        <i data-lucide="check-circle-2" class="w-3 h-3 text-green-500"></i>
+                        <span>Daging Segar</span>
+                        <i data-lucide="check-circle-2" class="w-3 h-3 text-green-500"></i>
+                        <span>Halal</span>
+                    </div>
+                </div>
+                <button id="modal-add-btn" class="mt-auto w-full bg-red-600 text-white py-4 rounded-2xl font-black flex items-center justify-center space-x-3 hover:bg-red-700 transition-all active:scale-95 shadow-lg shadow-red-200">
+                    <i data-lucide="shopping-cart" class="w-5 h-5"></i>
+                    <span>Tambah Ke Keranjang</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cart Drawer -->
+    <div id="cart-sidebar" class="fixed inset-0 z-[60] transform translate-x-full transition-transform duration-500 ease-in-out">
+        <div class="absolute inset-0 bg-slate-900/60 backdrop-blur-sm" onclick="toggleCart()"></div>
+        <div class="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl flex flex-col">
+            <div class="p-6 border-b flex justify-between items-center">
+                <h3 class="text-xl font-bold flex items-center space-x-2">
+                    <i data-lucide="shopping-bag" class="text-red-600"></i>
+                    <span>Pesanan Anda</span>
+                </h3>
+                <button onclick="toggleCart()" class="p-2 hover:bg-slate-100 rounded-full transition-colors"><i data-lucide="x"></i></button>
+            </div>
+            <div id="cart-items" class="flex-grow overflow-y-auto p-6 space-y-4 custom-scrollbar">
+                <!-- Items -->
+            </div>
+            <div class="p-6 bg-slate-50 border-t space-y-4">
+                <div class="flex justify-between items-center">
+                    <span class="text-slate-500 font-medium text-sm">Subtotal</span>
+                    <span id="cart-total" class="text-2xl font-black text-red-600">Rp 0</span>
+                </div>
+                <button onclick="checkout()" class="w-full bg-green-600 text-white py-4 rounded-2xl font-bold text-lg hover:bg-green-700 flex items-center justify-center space-x-3 transition active:scale-95 shadow-lg shadow-green-100">
+                    <i data-lucide="message-circle" class="w-6 h-6 fill-green-600 text-white"></i>
+                    <span>Checkout via WhatsApp</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Information -->
+    <footer class="bg-white border-t border-slate-200 pt-16 pb-12">
+        <div class="container mx-auto px-4 text-center">
+            <img src="https://simangu.smksalirsyad-hgl.sch.id/apimangu/uploads/siswa/232410058/1773109159_2fe6dbc1.png" alt="Logo" class="h-20 mx-auto mb-6 grayscale hover:grayscale-0 transition-all opacity-40 hover:opacity-100">
+            
+            <div class="max-w-5xl mx-auto bg-slate-50 rounded-[3rem] p-8 md:p-12 border border-slate-100 shadow-inner grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+                <!-- Pemilik & Alamat -->
+                <div class="space-y-4">
+                    <div class="space-y-1">
+                        <h4 class="text-xs font-black text-red-600 uppercase tracking-widest">Pemilik</h4>
+                        <p class="text-lg font-bold text-slate-900 leading-tight">Khirani Tri Hapsari</p>
+                    </div>
+                    <div class="space-y-1">
+                        <h4 class="text-xs font-black text-red-600 uppercase tracking-widest">Alamat Outlet</h4>
+                        <p class="text-sm font-semibold text-slate-900 leading-relaxed">Jl. Adi Sucipto No. 45, Banjarmasin, Solo</p>
+                    </div>
+                </div>
+
+                <!-- Kontak Utama -->
+                <div class="space-y-4">
+                    <h4 class="text-xs font-black text-red-600 uppercase tracking-widest">Kontak Resmi</h4>
+                    <div class="space-y-3">
+                        <div class="flex items-center space-x-3 bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm">
+                            <i data-lucide="phone" class="w-4 h-4 text-green-500 fill-green-500"></i>
+                            <span class="text-sm font-bold text-slate-900">081234567890</span>
+                        </div>
+                        <div class="flex items-center space-x-3 bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm">
+                            <i data-lucide="mail" class="w-4 h-4 text-red-500"></i>
+                            <span class="text-sm font-semibold text-slate-700">BaksoSolo@gmail.com</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Media Sosial & Jam -->
+                <div class="space-y-4">
+                    <h4 class="text-xs font-black text-red-600 uppercase tracking-widest">Media Sosial</h4>
+                    <div class="flex items-center space-x-3 bg-white px-4 py-2 rounded-xl border border-slate-100 shadow-sm mb-4">
+                        <i data-lucide="instagram" class="w-4 h-4 text-pink-600"></i>
+                        <span class="text-sm font-bold text-slate-900">@bakso_solo</span>
+                    </div>
+                    <div class="pt-2 border-t border-slate-200">
+                        <p class="text-[10px] text-slate-400 italic font-medium tracking-tight">Jam Operasional:</p>
+                        <p class="text-xs font-black text-slate-700">10:00 - 21:00 WIB</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-12 text-[10px] text-slate-400 font-bold uppercase tracking-[0.4em]">
+                &copy; 2024 Bakso Solo Berkah - Official Digital Catalog
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const products = [
+            {
+                id: 1,
+                name: "Bakso Solo",
+                price: 35000,
+                desc: "Bakso jumbo spesial dengan isian telur dan daging cincang premium. Menggunakan bumbu rahasia Solo.",
+                category: "Bakso",
+                img: "https://simangu.smksalirsyad-hgl.sch.id/apimangu/uploads/siswa/232410058/1773114004_e78f1c2c.jpg"
+            },
+            {
+                id: 2,
+                name: "Bakso Solo Samrat",
+                price: 25000,
+                desc: "Perpaduan bakso halus dan bakso urat dengan kuah kaldu sapi yang kental dan sangat gurih.",
+                category: "Bakso",
+                img: "https://simangu.smksalirsyad-hgl.sch.id/apimangu/uploads/siswa/232410058/1773114018_d470c6c8.jpg"
+            },
+            {
+                id: 4,
+                name: "Bakso Telur",
+                price: 20000,
+                desc: "Bakso berukuran besar dengan kejutan telur ayam utuh di dalamnya. Favorit semua kalangan!",
+                category: "Bakso",
+                img: "https://simangu.smksalirsyad-hgl.sch.id/apimangu/uploads/siswa/232410058/1773115531_786e558e.jpg"
+            },
+            {
+                id: 7,
+                name: "Mie Ayam",
+                price: 15000,
+                desc: "Mie kuning kenyal dengan topping potongan daging ayam bumbu kecap manis gurih serta sayuran segar.",
+                category: "Mie",
+                img: "https://simangu.smksalirsyad-hgl.sch.id/apimangu/uploads/siswa/232410058/1773115539_99d81e02.jpg"
+            },
+            {
+                id: 6,
+                name: "Es Teh Manis",
+                price: 5000,
+                desc: "Teh melati pilihan yang diseduh sempurna dengan gula murni. Sangat menyegarkan!",
+                category: "Minuman",
+                img: "https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=500&auto=format&fit=crop"
+            }
+        ];
+
+        let cart = [];
+
+        function renderMenu() {
+            const grid = document.getElementById('menu-grid');
+            grid.innerHTML = products.map(p => `
+                <div class="product-card group bg-white rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-2xl transition-all duration-500 border border-slate-100 flex flex-col h-full cursor-pointer" onclick="openModal(${p.id})">
+                    <div class="h-64 overflow-hidden relative">
+                        <img src="${p.img}" class="w-full h-full object-cover transition-transform duration-700" alt="${p.name}">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest text-red-600 shadow-sm">
+                            ${p.category}
+                        </div>
+                        <div class="absolute inset-0 bg-black/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                            <span class="bg-white text-slate-900 px-6 py-2 rounded-full font-bold text-xs shadow-xl">Lihat Detail</span>
+                        </div>
+                    </div>
+                    <div class="p-8 flex flex-col flex-grow">
+                        <h3 class="text-xl font-bold text-slate-900 mb-1 leading-tight">${p.name}</h3>
+                        <p class="text-red-600 font-black text-lg mb-4">Rp ${p.price.toLocaleString()}</p>
+                        <button onclick="event.stopPropagation(); addToCart(${p.id})" class="mt-auto w-full bg-slate-900 text-white py-4 rounded-2xl font-black text-xs flex items-center justify-center space-x-2 hover:bg-red-600 transition-all active:scale-95">
+                            <i data-lucide="plus" class="w-4 h-4"></i>
+                            <span>Tambah</span>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function openModal(id) {
+            const p = products.find(x => x.id === id);
+            document.getElementById('modal-img').src = p.img;
+            document.getElementById('modal-title').innerText = p.name;
+            document.getElementById('modal-desc').innerText = p.desc;
+            document.getElementById('modal-price').innerText = `Rp ${p.price.toLocaleString()}`;
+            document.getElementById('modal-category').innerText = p.category;
+            document.getElementById('modal-add-btn').onclick = () => { addToCart(p.id); closeModal(); };
+            document.getElementById('product-modal').classList.remove('hidden');
+            document.body.style.overflow = 'hidden';
+            lucide.createIcons();
+        }
+
+        function closeModal() {
+            document.getElementById('product-modal').classList.add('hidden');
+            document.body.style.overflow = 'auto';
+        }
+
+        function toggleCart() {
+            document.getElementById('cart-sidebar').classList.toggle('translate-x-full');
+        }
+
+        function addToCart(id) {
+            const product = products.find(p => p.id === id);
+            const exists = cart.find(item => item.id === id);
+            if (exists) { exists.qty++; } else { cart.push({...product, qty: 1}); }
+            updateUI();
+            
+            const countEl = document.getElementById('cart-count');
+            countEl.classList.remove('hidden');
+            countEl.classList.add('cart-bounce');
+            setTimeout(() => countEl.classList.remove('cart-bounce'), 500);
+        }
+
+        function changeQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty += delta;
+                if (item.qty <= 0) cart = cart.filter(i => i.id !== id);
+                updateUI();
+            }
+        }
+
+        function updateUI() {
+            const list = document.getElementById('cart-items');
+            const totalEl = document.getElementById('cart-total');
+            const countEl = document.getElementById('cart-count');
+
+            if (cart.length === 0) {
+                list.innerHTML = `
+                    <div class="flex flex-col items-center justify-center h-full opacity-30 py-12">
+                        <i data-lucide="shopping-basket" class="w-16 h-16 mb-4"></i>
+                        <p class="text-sm font-bold">Keranjang Kosong</p>
+                    </div>
+                `;
+                countEl.classList.add('hidden');
+            } else {
+                countEl.classList.remove('hidden');
+                list.innerHTML = cart.map(item => `
+                    <div class="flex items-center space-x-4 bg-slate-50 p-4 rounded-3xl border border-slate-100 group">
+                        <img src="${item.img}" class="w-16 h-16 rounded-2xl object-cover shadow-sm">
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-sm text-slate-900">${item.name}</h4>
+                            <p class="text-red-600 font-bold text-xs">Rp ${(item.price * item.qty).toLocaleString()}</p>
+                        </div>
+                        <div class="flex items-center space-x-2 bg-white rounded-full border p-1">
+                            <button onclick="changeQty(${item.id}, -1)" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-400"><i data-lucide="minus" class="w-3 h-3"></i></button>
+                            <span class="text-xs font-black w-4 text-center">${item.qty}</span>
+                            <button onclick="changeQty(${item.id}, 1)" class="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center text-slate-900"><i data-lucide="plus" class="w-3 h-3"></i></button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            totalEl.innerText = `Rp ${total.toLocaleString()}`;
+            countEl.innerText = cart.reduce((sum, item) => sum + item.qty, 0);
+            lucide.createIcons();
+        }
+
+        function checkout() {
+            if (cart.length === 0) return;
+            let msg = "*PESANAN KATALOG BAKSO SOLO BERKAH*\n---\n";
+            cart.forEach(i => { msg += `✅ ${i.name} (x${i.qty}) - Rp ${(i.price * i.qty).toLocaleString()}\n`; });
+            const total = cart.reduce((sum, item) => sum + (item.price * item.qty), 0);
+            msg += `---\n*TOTAL PEMBAYARAN: Rp ${total.toLocaleString()}*\n\n*Informasi Pengiriman:*\n📍 Alamat: [Tuliskan Alamat Lengkap]\n👤 Nama: [Nama Anda]\n\n*Kontak Outlet Resmi:*\n🏠 Jl. Adi Sucipto No. 45, Solo\n📸 Instagram: @bakso_solo\n📧 Email: BaksoSolo@gmail.com\n👤 Pemilik: Khirani Tri Hapsari`;
+            
+            // Redirect using the provided phone number
+            window.open(`https://wa.me/6281234567890?text=${encodeURIComponent(msg)}`);
+        }
+
+        window.onload = renderMenu;
+    </script>
 </body>
 </html>
+
